@@ -1,0 +1,20 @@
+<!-- Pull total amount donated on each of this site's donation pages: donate, event_payment_processing, annual_gala_tickets -->
+{% capture donation_total %}{% subpage "donate" with "total_donated" %}{% endcapture %}
+{% capture fundraiser_total %}{% subpage "event_payment_processing" with "total_donated" %}{% endcapture %}
+{% capture gala_total %}{% subpage "annual_gala_tickets" with "total_donated" %}{% endcapture %}
+
+<!-- Combine each donation page's amount to create a grand total -->
+{% capture total1 %}{{donation_total | plus: fundraiser_total}}{% endcapture %}
+{% capture grand_total %}{{total1 | plus: gala_total}}{% endcapture %}
+
+<!-- Create goal percentage -->
+{% capture donation_goal %}{{50000}}{% endcapture %}
+{% capture donation_goal_fraction %}{{grand_total | divided_by: donation_goal}}{% endcapture %}
+
+<!-- Donation goal bar -->
+{% assign thermo_width = 100 %}
+<div class="bar-text"><h2 class="strong">{{grand_total}}</h2> raised of a {{donation_goal}} goal</div>
+<div class="progress" style="width: {{ thermo_width }}%;">
+    <div class="bar bar-success" style="width: {{donation_goal_fraction | times: 100}}%; height: 100%;">
+  </div>
+</div>
